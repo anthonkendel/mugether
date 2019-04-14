@@ -1,5 +1,8 @@
 <template>
-  <b-dropdown v-model="selectedPlaylist">
+  <b-dropdown
+    v-if="isAuthorized"
+    v-model="selectedPlaylist"
+  >
     <template v-slot:trigger="">
       <button class="button">
         <span v-if="selectedPlaylist.id">
