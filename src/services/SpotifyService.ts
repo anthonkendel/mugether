@@ -1,4 +1,5 @@
 import { RequestService } from '@/services/RequestService';
+import { IGetPlaylists, IGetTracks } from '@/services/SpotifyInterfaces';
 
 const clientId = 'c0374a8b5c4144f0be3ebacfa7974330';
 const accessScopes = [
@@ -17,8 +18,8 @@ export interface ISpotifyService {
   authorize(): void;
   authorizeFromCallback(): Record<string, string>;
   me(accessToken: string): Promise<any>;
-  playlists(accessToken: string): Promise<any>;
-  tracks(playlistId: string, accessToken: string): Promise<any>;
+  getPlaylists(accessToken: string): Promise<IGetPlaylists>;
+  getTracks(playlistId: string, accessToken: string, pageSize?: number, indexOffset?: number): Promise<IGetTracks>;
   search(query: string, accessToken: string): Promise<any>;
   player(accessToken: string): Promise<any>;
   play(data: any, accessToken: string): Promise<any>;
@@ -58,7 +59,7 @@ export const SpotifyService: ISpotifyService = new class implements ISpotifyServ
     });
   }
 
-  public playlists(accessToken: string): Promise<any> {
+  public getPlaylists(accessToken: string): Promise<IGetPlaylists> {
     return RequestService.request({
       url: 'https://api.spotify.com/v1/me/playlists',
       headers: {
@@ -67,9 +68,9 @@ export const SpotifyService: ISpotifyService = new class implements ISpotifyServ
     });
   }
 
-  public tracks(playlistId: string, accessToken: string): Promise<any> {
+  public getTracks(playlistId: string, accessToken: string, pageSize = 50, indexOffset = 0): Promise<IGetTracks> {
     return RequestService.request({
-      url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+      url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${pageSize}&offset=${indexOffset}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

@@ -13,14 +13,19 @@ export default Vue.extend({
     this.handleAuthorizeFromCallback();
   },
   methods: {
-    handleAuthorizeFromCallback(): void {
+    async handleAuthorizeFromCallback(): Promise<void> {
       if (!this.$store.state.accessToken) {
         const { accessToken, expiresIn } = SpotifyService.authorizeFromCallback();
-        this.$store.dispatch(Actions.setState, { accessToken, expiresIn });
+        await this.$store.dispatch(Actions.setState, { accessToken, expiresIn });
+        this.$router.replace({ params: {}, query: {} });
+      } else {
+        this.$router.replace({ params: {}, query: {} });
       }
-    },
+    }
+    ,
   },
-});
+})
+;
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-fluid">
     <template v-if="accessToken">
       <router-view/>
     </template>
@@ -35,7 +35,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped>
-
-</style>
