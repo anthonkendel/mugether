@@ -1,15 +1,17 @@
 <template>
   <div>
+    <Navbar/>
     <AuthorizeCallbackHandler/>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
 import AuthorizeCallbackHandler from '@/components/AuthorizeCallbackHandler.vue';
+import Navbar from '@/components/Navbar.vue';
+import Vue from 'vue';
 
 export default Vue.extend({
   name: 'Mutogether',
-  components: { AuthorizeCallbackHandler },
+  components: { AuthorizeCallbackHandler, Navbar },
 });
 </script>
