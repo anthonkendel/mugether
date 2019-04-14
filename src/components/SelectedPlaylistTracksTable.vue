@@ -20,7 +20,7 @@
 
     <template v-slot:empty>
       <section class="section has-text-centered">
-        <h2 class="title is-5">No playlist selected.</h2>
+        <h2 class="title is-5">No tracks found.</h2>
       </section>
     </template>
   </b-table>
@@ -30,9 +30,10 @@
 import Vue from 'vue';
 import { IArtist, IPlaylist, ITrack } from '@/services/SpotifyInterfaces';
 import { SpotifyService } from '@/services/SpotifyService';
+import { AuthenticationService } from '@/services/AuthenticationService';
 
 export default Vue.extend({
-  name: 'SelectedPlaylistTracksList',
+  name: 'SelectedPlaylistTracksTable',
   watch: {
     async '$store.state.selectedPlaylist'(): Promise<void> {
       await this.loadTracks();
@@ -46,6 +47,7 @@ export default Vue.extend({
     isLoading: false,
   }),
   computed: {
+    accessToken: () => AuthenticationService.getAccessToken(),
     selectedPlaylist(): IPlaylist {
       return this.$store.state.selectedPlaylist;
     },
@@ -61,7 +63,7 @@ export default Vue.extend({
         const indexOffset = (this.currentPage - 1) * this.pageSize;
         const result = await SpotifyService.getTracks(
           this.selectedPlaylist.id,
-          this.$store.state.accessToken,
+          this.accessToken,
           this.pageSize,
           indexOffset,
         );

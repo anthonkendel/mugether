@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <template v-if="accessToken">
+    <template v-if="isAuthorized">
       <router-view/>
     </template>
     <template v-else>
@@ -20,13 +20,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import { SpotifyService } from '@/services/SpotifyService';
+import { AuthenticationService } from '@/services/AuthenticationService';
 
 export default Vue.extend({
   name: 'RouterHandler',
   computed: {
-    accessToken(): string {
-      return this.$store.state.accessToken;
-    },
+    isAuthorized: () => AuthenticationService.isAuthorized(),
   },
   methods: {
     onAuthorize(): void {

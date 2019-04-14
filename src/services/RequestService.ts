@@ -1,3 +1,5 @@
+import { AuthenticationService } from '@/services/AuthenticationService';
+
 export interface IRequestParameters {
   url: string;
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -17,7 +19,12 @@ export const RequestService: IRequestService = new class implements IRequestServ
       (options.headers as any)['Content-Type'] = 'application/json; charset=utf-8';
     }
     return fetch(url, options)
-      .then((value) => value.json())
+      .then((value) => {
+        if (!value.ok) {
+          AuthenticationService.logout();
+        }
+        return value.json();
+      })
       .then((json) => json)
       .catch((error) => {
         throw error;

@@ -28,10 +28,13 @@ import Vue from 'vue';
 import { IPlaylist } from '@/services/SpotifyInterfaces';
 import { Actions } from '@/store/actions';
 import { SpotifyService } from '@/services/SpotifyService';
+import { AuthenticationService } from '@/services/AuthenticationService';
 
 export default Vue.extend({
   name: 'SelectedPlaylistDropdown',
   computed: {
+    isAuthorized: () => AuthenticationService.isAuthorized(),
+    accessToken: () => AuthenticationService.getAccessToken(),
     selectedPlaylist: {
       get(): IPlaylist {
         return this.$store.state.selectedPlaylist;
@@ -47,13 +50,13 @@ export default Vue.extend({
     },
   },
   async created(): Promise<void> {
-    if (this.$store.state.accessToken) {
+    if (this.isAuthorized) {
       await this.loadPlaylists();
     }
   },
   methods: {
     async loadPlaylists(): Promise<void> {
-      const { items = [] } = await SpotifyService.getPlaylists(this.$store.state.accessToken);
+      const { items = [] } = await SpotifyService.getPlaylists(this.accessToken);
       const collaborative = items!.filter((item) => item.collaborative);
       await this.$store.dispatch(Actions.setState, {
         availablePlaylists: collaborative,

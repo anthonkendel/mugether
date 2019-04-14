@@ -5,18 +5,21 @@
 <script lang="ts">
 import { SpotifyService } from '@/services/SpotifyService';
 import Vue from 'vue';
-import { Actions } from '@/store/actions';
+import { AuthenticationService } from '@/services/AuthenticationService';
 
 export default Vue.extend({
   name: 'AuthorizeCallbackHandler',
   created(): void {
     this.handleAuthorizeFromCallback();
   },
+  computed: {
+    isAuthorized: () => AuthenticationService.isAuthorized(),
+  },
   methods: {
     async handleAuthorizeFromCallback(): Promise<void> {
-      if (!this.$store.state.accessToken) {
+      if (!this.isAuthorized) {
         const { accessToken, expiresIn } = SpotifyService.authorizeFromCallback();
-        await this.$store.dispatch(Actions.setState, { accessToken, expiresIn });
+        await AuthenticationService.authorize(accessToken, expiresIn);
         this.$router.replace({ params: {}, query: {} });
       } else {
         this.$router.replace({ params: {}, query: {} });
