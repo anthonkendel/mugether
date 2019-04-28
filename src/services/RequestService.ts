@@ -23,6 +23,9 @@ export const RequestService: IRequestService = new class implements IRequestServ
         if (!value.ok) {
           AuthenticationService.logout();
         }
+        if (value.status === 204) {
+          return {};
+        }
         return value.json();
       })
       .then((json) => json)

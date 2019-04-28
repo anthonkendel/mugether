@@ -5,13 +5,10 @@
   >
     <template v-slot:trigger="">
       <button class="button">
-        <span v-if="selectedPlaylist.id">
+        <span>
           Selected playlist:
-          <strong>{{ selectedPlaylist.name }}</strong>
-        </span>
-        <span v-else>
-          Selected playlist:
-          <strong>None</strong>
+          <strong v-if="selectedPlaylist.id">{{ selectedPlaylist.name }}</strong>
+          <strong v-else>None</strong>
         </span>
       </button>
     </template>

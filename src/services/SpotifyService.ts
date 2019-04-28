@@ -1,5 +1,9 @@
 import { RequestService } from '@/services/RequestService';
-import { IGetPlaylists, IGetTracks } from '@/services/SpotifyInterfaces';
+import {
+  IGetPlaylists,
+  IGetTracks,
+  IGetDevices,
+} from '@/services/SpotifyInterfaces';
 
 const clientId = 'c0374a8b5c4144f0be3ebacfa7974330';
 const accessScopes = [
@@ -14,19 +18,35 @@ const accessScopes = [
 ];
 const scopes = accessScopes.join(' ');
 
+interface IUpdatePlayerParameters {
+  deviceIds: string[];
+  play?: boolean;
+}
+
 export interface ISpotifyService {
   authorize(): void;
   authorizeFromCallback(): Record<string, string>;
   me(accessToken: string): Promise<any>;
   getPlaylists(accessToken: string): Promise<IGetPlaylists>;
-  getTracks(playlistId: string, accessToken: string, pageSize?: number, indexOffset?: number): Promise<IGetTracks>;
+  getTracks(
+    playlistId: string,
+    accessToken: string,
+    pageSize?: number,
+    indexOffset?: number,
+  ): Promise<IGetTracks>;
   search(query: string, accessToken: string): Promise<any>;
+  getDevices(accessToken: string): Promise<IGetDevices>;
+  updatePlayer(
+    { deviceIds, play }: IUpdatePlayerParameters,
+    accessToken: string,
+  ): Promise<any>;
   player(accessToken: string): Promise<any>;
   play(data: any, accessToken: string): Promise<any>;
   pause(accessToken: string): Promise<any>;
 }
 
-export const SpotifyService: ISpotifyService = new class implements ISpotifyService {
+export const SpotifyService: ISpotifyService = new class
+  implements ISpotifyService {
   public authorize() {
     const params: Record<string, any> = {
       client_id: clientId,
@@ -41,7 +61,6 @@ export const SpotifyService: ISpotifyService = new class implements ISpotifyServ
       .join('&');
     window.location.href = `https://accounts.spotify.com/authorize?${query}`;
   }
-
 
   public authorizeFromCallback(): Record<string, string> {
     const params = new URLSearchParams(window.location.hash.slice(1));
@@ -68,7 +87,12 @@ export const SpotifyService: ISpotifyService = new class implements ISpotifyServ
     });
   }
 
-  public getTracks(playlistId: string, accessToken: string, pageSize = 50, indexOffset = 0): Promise<IGetTracks> {
+  public getTracks(
+    playlistId: string,
+    accessToken: string,
+    pageSize = 50,
+    indexOffset = 0,
+  ): Promise<IGetTracks> {
     return RequestService.request({
       url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${pageSize}&offset=${indexOffset}`,
       headers: {
@@ -85,6 +109,32 @@ export const SpotifyService: ISpotifyService = new class implements ISpotifyServ
       url: `https://api.spotify.com/v1/search?${urlSearch}`,
       headers: {
         Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
+
+  public getDevices(accessToken: string): Promise<IGetDevices> {
+    return RequestService.request({
+      url: 'https://api.spotify.com/v1/me/player/devices',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
+
+  public updatePlayer(
+    { deviceIds = [], play }: IUpdatePlayerParameters,
+    accessToken: string,
+  ): Promise<any> {
+    return RequestService.request({
+      method: 'PUT',
+      url: 'https://api.spotify.com/v1/me/player',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: {
+        device_ids: deviceIds,
+        play,
       },
     });
   }

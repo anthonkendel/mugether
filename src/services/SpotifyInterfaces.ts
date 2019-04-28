@@ -132,3 +132,15 @@ export interface IVideoThumbnail {
   url?: null;
 }
 
+export interface IGetDevices {
+  devices?: IDevice[] | null;
+}
+export interface IDevice {
+  id: string;
+  is_active: boolean;
+  is_private_session: boolean;
+  is_restricted: boolean;
+  name: string;
+  type: string;
+  volume_percent: number;
+}

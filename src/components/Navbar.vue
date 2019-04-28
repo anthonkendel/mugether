@@ -18,6 +18,9 @@
     <div class="navbar-menu">
       <div class="navbar-end">
         <div class="navbar-item">
+          <ActiveDeviceDropdown/>
+        </div>
+        <div class="navbar-item">
           <SelectedPlaylistDropdown/>
         </div>
       </div>
@@ -28,9 +31,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import SelectedPlaylistDropdown from '@/components/SelectedPlaylistDropdown.vue';
+import ActiveDeviceDropdown from '@/components/ActiveDeviceDropdown.vue';
 
 export default Vue.extend({
   name: 'Navbar',
-  components: { SelectedPlaylistDropdown },
+  components: { ActiveDeviceDropdown, SelectedPlaylistDropdown },
 });
 </script>
