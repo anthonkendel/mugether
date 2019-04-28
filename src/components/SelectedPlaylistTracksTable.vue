@@ -10,10 +10,17 @@
     backend-pagination
   >
     <template v-slot="{ row }">
-      <b-table-column field="name" label="Name">
+      <b-table-column
+        field="name"
+        label="Name"
+        width="300"
+      >
         {{ row.track.name }}
       </b-table-column>
-      <b-table-column field="name" label="Artist(s)">
+      <b-table-column
+        field="name"
+        label="Artist(s)"
+      >
         {{ getArtists(row.track.artists) }}
       </b-table-column>
     </template>
