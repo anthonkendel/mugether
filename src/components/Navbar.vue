@@ -5,17 +5,22 @@
         <img src="https://image.flaticon.com/icons/png/512/62/62470.png" alt="Mugether">
       </div>
       <div class="navbar-item">
-        <h1 class="title is-5">Mugether</h1>
+        <h1>Mugether</h1>
       </div>
 
-      <a role="button" class="navbar-burger">
+      <a
+        role="button"
+        class="navbar-burger"
+        :class="{ 'is-active': isActive }"
+        @click="onClickNavbarBurger"
+      >
         <span></span>
         <span></span>
         <span></span>
       </a>
     </div>
 
-    <div class="navbar-menu">
+    <div class="navbar-menu" :class="{ 'is-active': isActive }">
       <div class="navbar-end">
         <div class="navbar-item">
           <ActiveDeviceDropdown/>
@@ -36,5 +41,13 @@ import ActiveDeviceDropdown from '@/components/ActiveDeviceDropdown.vue';
 export default Vue.extend({
   name: 'Navbar',
   components: { ActiveDeviceDropdown, SelectedPlaylistDropdown },
+  data: () => ({
+    isActive: false,
+  }),
+  methods: {
+    onClickNavbarBurger(): void {
+      this.isActive = !this.isActive;
+    },
+  },
 });
 </script>
