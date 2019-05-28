@@ -40,7 +40,7 @@ export default Vue.extend({
     },
     activeDevice: {
       get(): any {
-        return this.$store.state.activeDevice;
+        return this.$store.state.activeDevice || {};
       },
       async set(value: Device): Promise<void> {
         if (this.$store.state.activeDevice.id !== value.id) {

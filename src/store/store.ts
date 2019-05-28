@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import { mutations } from '@/store/mutations';
 import { actions } from '@/store/actions';
-import { Playlist, Device } from '@/services/SpotifyInterfaces';
+import { Playlist, Device, GetPlayer } from '@/services/SpotifyInterfaces';
 
 
 Vue.use(Vuex);
@@ -15,6 +15,7 @@ export interface IState {
   selectedPlaylist: Playlist | {};
   availableDevices: Device[];
   activeDevice: Device | {};
+  player: GetPlayer | {};
 }
 
 export const persistence = new VuexPersistence<IState>({
@@ -31,6 +32,7 @@ export const store = new Vuex.Store({
     selectedPlaylist: {},
     availableDevices: [],
     activeDevice: {},
+    player: {},
   } as IState,
   mutations,
   actions,
