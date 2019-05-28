@@ -1,8 +1,11 @@
 import { RequestService } from '@/services/RequestService';
 import {
-  IGetPlaylists,
-  IGetTracks,
-  IGetDevices,
+  GetPlaylists,
+  GetTracks,
+  GetDevices,
+  Search,
+  GetMe,
+  GetPlayer,
 } from '@/services/SpotifyInterfaces';
 
 const clientId = 'c0374a8b5c4144f0be3ebacfa7974330';
@@ -18,35 +21,35 @@ const accessScopes = [
 ];
 const scopes = accessScopes.join(' ');
 
-interface IUpdatePlayerParameters {
+interface UpdatePlayerParameters {
   deviceIds: string[];
   play?: boolean;
 }
 
-export interface ISpotifyService {
+export interface SpotifyService {
   authorize(): void;
   authorizeFromCallback(): Record<string, string>;
-  me(accessToken: string): Promise<any>;
-  getPlaylists(accessToken: string): Promise<IGetPlaylists>;
+  getMe(accessToken: string): Promise<GetMe>;
+  getPlaylists(accessToken: string): Promise<GetPlaylists>;
   getTracks(
     playlistId: string,
     accessToken: string,
     pageSize?: number,
     indexOffset?: number,
-  ): Promise<IGetTracks>;
-  search(query: string, accessToken: string): Promise<any>;
-  getDevices(accessToken: string): Promise<IGetDevices>;
+  ): Promise<GetTracks>;
+  querySearch(query: string, accessToken: string): Promise<Search>;
+  getDevices(accessToken: string): Promise<GetDevices>;
   updatePlayer(
-    { deviceIds, play }: IUpdatePlayerParameters,
+    { deviceIds, play }: UpdatePlayerParameters,
     accessToken: string,
   ): Promise<any>;
-  player(accessToken: string): Promise<any>;
-  play(data: any, accessToken: string): Promise<any>;
-  pause(accessToken: string): Promise<any>;
+  getPlayer(accessToken: string): Promise<GetPlayer>;
+  setPlay(data: any, accessToken: string): Promise<any>;
+  setPause(accessToken: string): Promise<any>;
 }
 
-export const SpotifyService: ISpotifyService = new class
-  implements ISpotifyService {
+export const SpotifyService: SpotifyService = new class
+  implements SpotifyService {
   public authorize() {
     const params: Record<string, any> = {
       client_id: clientId,
@@ -69,7 +72,7 @@ export const SpotifyService: ISpotifyService = new class
     return { accessToken, expiresIn };
   }
 
-  public me(accessToken: string): Promise<any> {
+  public getMe(accessToken: string): Promise<GetMe> {
     return RequestService.request({
       url: 'https://api.spotify.com/v1/me',
       headers: {
@@ -78,7 +81,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public getPlaylists(accessToken: string): Promise<IGetPlaylists> {
+  public getPlaylists(accessToken: string): Promise<GetPlaylists> {
     return RequestService.request({
       url: 'https://api.spotify.com/v1/me/playlists',
       headers: {
@@ -92,7 +95,7 @@ export const SpotifyService: ISpotifyService = new class
     accessToken: string,
     pageSize = 50,
     indexOffset = 0,
-  ): Promise<IGetTracks> {
+  ): Promise<GetTracks> {
     return RequestService.request({
       url: `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${pageSize}&offset=${indexOffset}`,
       headers: {
@@ -101,7 +104,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public search(query: string, accessToken: string): Promise<any> {
+  public querySearch(query: string, accessToken: string): Promise<Search> {
     const searchQuery = `q=${query}`;
     const searchTypes = 'type=track';
     const urlSearch = encodeURI(`${searchQuery}&${searchTypes}`);
@@ -113,7 +116,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public getDevices(accessToken: string): Promise<IGetDevices> {
+  public getDevices(accessToken: string): Promise<GetDevices> {
     return RequestService.request({
       url: 'https://api.spotify.com/v1/me/player/devices',
       headers: {
@@ -123,7 +126,7 @@ export const SpotifyService: ISpotifyService = new class
   }
 
   public updatePlayer(
-    { deviceIds = [], play }: IUpdatePlayerParameters,
+    { deviceIds = [], play }: UpdatePlayerParameters,
     accessToken: string,
   ): Promise<any> {
     return RequestService.request({
@@ -139,7 +142,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public player(accessToken: string): Promise<any> {
+  public getPlayer(accessToken: string): Promise<any> {
     // TODO: Handle 204 NO CONTENT. No content means no player found.
     return RequestService.request({
       url: 'https://api.spotify.com/v1/me/player',
@@ -149,7 +152,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public play(body: any, accessToken: string): Promise<any> {
+  public  setPlay(body: any, accessToken: string): Promise<any> {
     return RequestService.request({
       method: 'PUT',
       url: 'https://api.spotify.com/v1/me/player/play',
@@ -160,7 +163,7 @@ export const SpotifyService: ISpotifyService = new class
     });
   }
 
-  public pause(accessToken: string): Promise<any> {
+  public setPause(accessToken: string): Promise<any> {
     return RequestService.request({
       method: 'PUT',
       url: 'https://api.spotify.com/v1/me/player/pause',

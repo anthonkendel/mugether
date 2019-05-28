@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { IPlaylist } from '@/services/SpotifyInterfaces';
+import { Playlist } from '@/services/SpotifyInterfaces';
 import { Actions } from '@/store/actions';
 import { SpotifyService } from '@/services/SpotifyService';
 import { AuthenticationService } from '@/services/AuthenticationService';
@@ -36,16 +36,16 @@ export default Vue.extend({
     isAuthorized: () => AuthenticationService.isAuthorized(),
     accessToken: () => AuthenticationService.getAccessToken(),
     selectedPlaylist: {
-      get(): IPlaylist {
+      get(): Playlist {
         return this.$store.state.selectedPlaylist;
       },
-      async set(value: IPlaylist): Promise<void> {
+      async set(value: Playlist): Promise<void> {
         if (this.$store.state.selectedPlaylist !== value) {
           await this.$store.dispatch(Actions.setState, { selectedPlaylist: value });
         }
       },
     },
-    playlists(): IPlaylist[] {
+    playlists(): Playlist[] {
       return this.$store.state.availablePlaylists;
     },
   },

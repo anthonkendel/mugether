@@ -35,7 +35,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { IArtist, IPlaylist, ITrack } from '@/services/SpotifyInterfaces';
+import { Artist, Playlist, Track } from '@/services/SpotifyInterfaces';
 import { SpotifyService } from '@/services/SpotifyService';
 import { AuthenticationService } from '@/services/AuthenticationService';
 
@@ -47,7 +47,7 @@ export default Vue.extend({
     },
   },
   data: () => ({
-    tracks: new Array<ITrack>(),
+    tracks: new Array<Track>(),
     totalNumberOfTracks: 0,
     currentPage: 1,
     pageSize: 14,
@@ -55,7 +55,7 @@ export default Vue.extend({
   }),
   computed: {
     accessToken: () => AuthenticationService.getAccessToken(),
-    selectedPlaylist(): IPlaylist {
+    selectedPlaylist(): Playlist {
       return this.$store.state.selectedPlaylist;
     },
   },
@@ -85,7 +85,7 @@ export default Vue.extend({
       await this.loadTracks();
     },
 
-    getArtists(artists: IArtist[] = []): string {
+    getArtists(artists: Artist[] = []): string {
       return artists.map((artist) => artist.name).join(', ');
     },
   },

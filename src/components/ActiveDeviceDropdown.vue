@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { IPlaylist, IDevice } from '@/services/SpotifyInterfaces';
+import { Playlist, Device } from '@/services/SpotifyInterfaces';
 import { Actions } from '@/store/actions';
 import { SpotifyService } from '@/services/SpotifyService';
 import { AuthenticationService } from '@/services/AuthenticationService';
@@ -35,14 +35,14 @@ export default Vue.extend({
   computed: {
     isAuthorized: () => AuthenticationService.isAuthorized(),
     accessToken: () => AuthenticationService.getAccessToken(),
-    availableDevices(): IDevice[] {
+    availableDevices(): Device[] {
       return this.$store.state.availableDevices;
     },
     activeDevice: {
       get(): any {
         return this.$store.state.activeDevice;
       },
-      async set(value: IDevice): Promise<void> {
+      async set(value: Device): Promise<void> {
         if (this.$store.state.activeDevice.id !== value.id) {
           await SpotifyService.updatePlayer({ deviceIds: [value.id] }, this.accessToken);
           this.$store.dispatch(Actions.setState, { activeDevice: value });
