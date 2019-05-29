@@ -48,6 +48,10 @@ $colors: (
     $danger,
     $danger-invert
   ),
+  "link": (
+    $link,
+    $link-invert
+  )
 );
 
 @import "~bulma";
