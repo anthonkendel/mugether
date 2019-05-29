@@ -51,17 +51,8 @@ export default Vue.extend({
   },
   async created(): Promise<void> {
     if (this.isAuthorized) {
-      await this.loadPlaylists();
+      await this.$store.dispatch(Actions.loadAvailablePlaylists);
     }
-  },
-  methods: {
-    async loadPlaylists(): Promise<void> {
-      const { items = [] } = await SpotifyService.getPlaylists(this.accessToken);
-      const collaborative = items!.filter((item) => item.collaborative);
-      await this.$store.dispatch(Actions.setState, {
-        availablePlaylists: collaborative,
-      });
-    },
   },
 });
 </script>

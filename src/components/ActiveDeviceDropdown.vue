@@ -52,15 +52,8 @@ export default Vue.extend({
   },
   async created(): Promise<void> {
     if (this.isAuthorized) {
-      await this.loadDevices();
+      await this.$store.dispatch(Actions.loadDevices);
     }
-  },
-  methods: {
-    async loadDevices(): Promise<void> {
-      const { devices = [] } = await SpotifyService.getDevices(this.accessToken);
-      const activeDevice = devices!.find((device) => device.is_active);
-      await this.$store.dispatch(Actions.setState, { availableDevices: devices, activeDevice });
-    },
   },
 });
 </script>
