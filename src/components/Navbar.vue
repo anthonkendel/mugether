@@ -21,26 +21,16 @@
     </div>
 
     <div class="navbar-menu" :class="{ 'is-active': isActive }">
-      <div class="navbar-end">
-        <div class="navbar-item">
-          <ActiveDeviceDropdown/>
-        </div>
-        <div class="navbar-item">
-          <SelectedPlaylistDropdown/>
-        </div>
-      </div>
+      <div class="navbar-end"></div>
     </div>
   </nav>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import SelectedPlaylistDropdown from '@/components/SelectedPlaylistDropdown.vue';
-import ActiveDeviceDropdown from '@/components/ActiveDeviceDropdown.vue';
 
 export default Vue.extend({
   name: 'Navbar',
-  components: { ActiveDeviceDropdown, SelectedPlaylistDropdown },
   data: () => ({
     isActive: false,
   }),

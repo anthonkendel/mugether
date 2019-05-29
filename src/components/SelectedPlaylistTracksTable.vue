@@ -5,6 +5,7 @@
     :total="totalNumberOfTracks"
     :per-page="pageSize"
     :current-page="currentPage"
+    :selected="selectedTrack"
     @page-change="onPageChange"
     paginated
     backend-pagination
@@ -35,7 +36,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Artist, Playlist, Track } from '@/services/SpotifyInterfaces';
+import { Artist, Playlist, Track, GetPlayer } from '@/services/SpotifyInterfaces';
 import { SpotifyService } from '@/services/SpotifyService';
 import { AuthenticationService } from '@/services/AuthenticationService';
 
@@ -57,6 +58,12 @@ export default Vue.extend({
     accessToken: () => AuthenticationService.getAccessToken(),
     selectedPlaylist(): Playlist {
       return this.$store.state.selectedPlaylist;
+    },
+    selectedTrack(): Track | undefined {
+      return this.tracks.find((item) => item.track.id === this.player.item.id);
+    },
+    player(): GetPlayer {
+      return this.$store.state.player;
     },
   },
   async created(): Promise<void> {
