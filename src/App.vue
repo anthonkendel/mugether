@@ -1,9 +1,9 @@
 <template>
   <div>
+    <PlayerHandler/>
     <AuthorizeCallbackHandler/>
     <Navbar/>
     <RouterHandler/>
-    <PlayerHandler/>
   </div>
 </template>
 

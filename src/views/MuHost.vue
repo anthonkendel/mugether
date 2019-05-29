@@ -2,7 +2,7 @@
   <section class="section">
     <div class="columns">
       <div class="column is-2">
-        <SelectedPlaylistDropdown class="is-full-width"/>
+        <ActiveDeviceDropdown/>
       </div>
       <div class="column is-2">
         <SelectedPlaylistDropdown/>

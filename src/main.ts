@@ -3,13 +3,10 @@ import App from '@/App.vue';
 import { router } from '@/router';
 import { store } from '@/store';
 import Buefy from 'buefy';
-import 'bulma/bulma.sass';
-import 'buefy/dist/buefy.css';
+import '@/assets/style.scss';
 import '@/registerServiceWorker';
 
-Vue.use(Buefy, {
-  defaultIconPack: 'fas',
-});
+Vue.use(Buefy, { defaultIconPack: 'fas' });
 
 Vue.config.productionTip = false;
 
